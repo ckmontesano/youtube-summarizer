@@ -123,6 +123,7 @@ const formatSummary = (text) => {
     .replace(/Fetching transcript for video ID:.*\n/, '')
     .replace(/Generating summary\.\.\.\n/, '')
     .replace(/=== Video Summary ===\n/, '')
+    .replace(/^"|"$/g, '')  // Remove quotes from the beginning and end
     .trim()
     .replace(/^- /gm, '• ')
   
@@ -163,7 +164,7 @@ const handleSubmit = async () => {
     
     const newSummary = {
       url: videoUrl.value,
-      title: response.data.title,
+      title: response.data.title.replace(/^"|"$/g, ''),  // Remove quotes when storing the title
       summary: response.data.summary,
       timestamp: Date.now()
     }
@@ -411,7 +412,7 @@ button:disabled {
 }
 
 .accordion-header:hover {
-  background: white;
+  background: #f3f4f6 !important;  /* Override button hover styles */
 }
 
 .header-content {

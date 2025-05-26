@@ -5,7 +5,7 @@ import sys
 from typing import Optional, Tuple
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 
 def extract_video_id(url: str) -> Optional[str]:
@@ -29,11 +29,11 @@ def get_transcript(video_id: str) -> str:
 
 def summarize_text(text: str, api_key: str) -> Tuple[str, str]:
     """Generate a title and summary of the given text using OpenAI's API."""
-    openai.api_key = api_key
+    client = OpenAI(api_key=api_key)
     
     try:
         # First, generate a title
-        title_response = openai.ChatCompletion.create(
+        title_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that creates concise, engaging titles for YouTube videos based on their content. The title should be descriptive but brief (5-10 words), and should capture the main topic or theme of the video. Do not include any special characters or formatting, just plain text."},
@@ -45,7 +45,7 @@ def summarize_text(text: str, api_key: str) -> Tuple[str, str]:
         title = title_response.choices[0].message.content.strip()
 
         # Then generate the summary
-        summary_response = openai.ChatCompletion.create(
+        summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that summarizes YouTube video transcripts. Format your response as a bullet point list, with each main point or key takeaway starting with a '-'. Focus on the most important information and keep each point concise. Aim for 5-7 key points."},

@@ -58,7 +58,15 @@ app.post("/api/summarize", async (req, res) => {
         });
       }
 
-      res.json({ summary: summary.trim() });
+      // Parse the title and summary from the Python script output
+      const titleMatch = summary.match(/=== (.*?) ===/);
+      const title = titleMatch ? titleMatch[1] : "Untitled Video";
+      const summaryText = summary.replace(/=== .*? ===\n/, "").trim();
+
+      res.json({
+        title: title,
+        summary: summaryText,
+      });
     });
   } catch (err) {
     console.error("Server error:", err);
