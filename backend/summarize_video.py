@@ -82,10 +82,7 @@ def main():
         print("Error: Invalid YouTube URL")
         sys.exit(1)
 
-    print(f"Fetching transcript for video ID: {video_id}")
     transcript = get_transcript(video_id)
-    
-    print("\nGenerating title and summary...")
     title, summary = summarize_text(transcript, api_key)
     
     # Print the title and summary

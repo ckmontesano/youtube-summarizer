@@ -119,15 +119,7 @@ const saveHistory = () => {
 const formatSummary = (text) => {
   if (!text) return ''
   
-  let formatted = text
-    .replace(/Fetching transcript for video ID:.*\n/, '')
-    .replace(/Generating summary\.\.\.\n/, '')
-    .replace(/=== Video Summary ===\n/, '')
-    .replace(/^"|"$/g, '')  // Remove quotes from the beginning and end
-    .trim()
-    .replace(/^- /gm, '• ')
-  
-  return formatted.split('\n\n').map(paragraph => {
+  return text.split('\n\n').map(paragraph => {
     if (paragraph.includes('• ')) {
       return paragraph.split('\n').map(line => `<p>${line}</p>`).join('')
     }
